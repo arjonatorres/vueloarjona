@@ -2,8 +2,6 @@
 
 namespace app\models;
 
-use Yii;
-
 /**
  * This is the model class for table "companias".
  *
@@ -39,7 +37,7 @@ class Companias extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'den_comp' => 'Den Comp',
+            'den_comp' => 'Compañía aérea',
         ];
     }
 

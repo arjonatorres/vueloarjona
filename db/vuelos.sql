@@ -57,11 +57,13 @@ CREATE TABLE reservas
                             ON DELETE NO ACTION ON UPDATE CASCADE
   , asiento    numeric(5)   NOT NULL
   , fecha_hora timestamp(0) NOT NULL DEFAULT localtimestamp
+  , UNIQUE (usuario_id, vuelo_id)
 );
 
 INSERT INTO usuarios (nombre, password)
      VALUES('pepe', crypt('pepe', gen_salt('bf', 13)))
-         , ('juan', crypt('juan', gen_salt('bf', 13)));
+         , ('juan', crypt('juan', gen_salt('bf', 13)))
+         , ('jose', crypt('jose', gen_salt('bf', 13)));
 
 INSERT INTO aeropuertos (id_aero, den_aero)
      VALUES ('XRY', 'Jerez de la Frontera')
@@ -75,9 +77,11 @@ INSERT INTO companias (den_comp)
           , ('Vueling');
 
 INSERT INTO vuelos (id_vuelo, orig_id, dest_id, comp_id, salida, llegada, plazas, precio)
-     VALUES ('AA1111', 1, 3, 3, localtimestamp + 'P4D'::interval, localtimestamp + 'P4DT2H'::interval, 50, 70)
-          , ('BB2222', 4, 2, 1, localtimestamp + 'P5D'::interval, localtimestamp + 'P5DT1H'::interval, 30, 40)
-          , ('CC3333', 3, 2, 2, localtimestamp + 'P7D'::interval, localtimestamp + 'P7DT2H'::interval, 60, 80);
+     VALUES ('AA1111', 1, 3, 3, localtimestamp - 'P2D'::interval, localtimestamp + 'P2DT2H'::interval, 20, 70)
+          , ('BB2222', 4, 2, 1, localtimestamp + 'P5D'::interval, localtimestamp + 'P5DT1H'::interval, 3, 40)
+          , ('CC3333', 3, 2, 2, localtimestamp + 'P7D'::interval, localtimestamp + 'P7DT2H'::interval, 15, 80);
 
 INSERT INTO reservas (usuario_id, vuelo_id, asiento, fecha_hora)
-     VALUES (1, 2, 23, localtimestamp);
+     VALUES (1, 2, 2, localtimestamp)
+          , (2, 2, 3, localtimestamp)
+          , (3, 1, 12, localtimestamp);

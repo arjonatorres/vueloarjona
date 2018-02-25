@@ -2,8 +2,6 @@
 
 namespace app\models;
 
-use Yii;
-
 /**
  * This is the model class for table "vuelos".
  *
@@ -61,11 +59,49 @@ class Vuelos extends \yii\db\ActiveRecord
             'orig_id' => 'Orig ID',
             'dest_id' => 'Dest ID',
             'comp_id' => 'Comp ID',
-            'salida' => 'Salida',
-            'llegada' => 'Llegada',
+            'salida' => 'Fecha de salida',
+            'llegada' => 'Fecha de llegada',
             'plazas' => 'Plazas',
             'precio' => 'Precio',
         ];
+    }
+
+    public function getAsientosLibres()
+    {
+        $ocupados = $this->getAsientosOcupados();
+        $array = [];
+        for ($i = 1; $i < $this->plazas + 1; $i++) {
+            if (!in_array($i, $ocupados)) {
+                $array[] = $i;
+            }
+        }
+
+        return $array;
+    }
+
+    public function getAsientosOcupados()
+    {
+        $array = [];
+        foreach ($this->getReservas()->all() as $reserva) {
+            $array[] = $reserva->asiento;
+        }
+
+        return $array;
+    }
+
+    public function getAsientoLibre($asiento)
+    {
+        return !$this->getReservas()->where(['in', 'asiento', $asiento])->exists();
+    }
+
+    public function getPlazasLibres()
+    {
+        return $this->plazas - $this->getReservas()->count();
+    }
+
+    public function getTienePlazasLibres()
+    {
+        return ($this->plazas - $this->getReservas()->count()) !== 0;
     }
 
     /**
