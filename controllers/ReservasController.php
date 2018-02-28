@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Reservas;
+use app\models\Vuelos;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
@@ -73,17 +74,30 @@ class ReservasController extends Controller
      * Creates a new Reservas model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
+     * @param null|mixed $vuelo_id
      */
-    public function actionCreate()
+    public function actionCreate($vuelo_id = null)
     {
+        if ($vuelo_id === null) {
+            throw new NotFoundHttpException('Falta el id.');
+        }
         $model = new Reservas();
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
+        if ($model->errors) {
+            foreach ($model->errors as $error) {
+                Yii::$app->session->setFlash('error', $error);
+            }
+        }
+        $model->vuelo_id = $vuelo_id;
+        $model->usuario_id = Yii::$app->user->identity->id;
 
+        $vuelo = Vuelos::findOne(['id' => $vuelo_id]);
+        $asientos = $vuelo->asientoslibres;
         return $this->render('create', [
             'model' => $model,
+            'asientos' => $asientos,
         ]);
     }
 

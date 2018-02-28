@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Reservas */
 
-$this->title = 'Create Reservas';
+$this->title = 'Crear Reserva';
 $this->params['breadcrumbs'][] = ['label' => 'Reservas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -16,6 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $this->render('_form', [
         'model' => $model,
+        'asientos' => $asientos,
     ]) ?>
 
 </div>

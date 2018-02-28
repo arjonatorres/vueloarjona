@@ -40,7 +40,6 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'Vuelos disponibles', 'url' => ['/vuelos/index']],
-            ['label' => 'Crear reserva', 'url' => ['/reservas/create']],
             ['label' => 'Lista de reservas', 'url' => ['/reservas/index']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
             Yii::$app->user->isGuest ? (

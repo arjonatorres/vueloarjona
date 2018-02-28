@@ -8,36 +8,36 @@ use yii\widgets\ActiveForm;
 /* @var $model app\models\Reservas */
 /* @var $form yii\widgets\ActiveForm */
 
-$urlVueloPlazasLibres = Url::to(['vuelos/plazas-libres']);
-
-$js = <<<EOT
-    $('#vuelo').on('blur', function() {
-        $.getJSON(
-            '$urlVueloPlazasLibres',
-            {vuelo_id: $(this).val()},
-            mostrar
-        );
-    });
-
-    function mostrar(data) {
-        $('#lista').empty();
-        if (data.length == 0) {
-            var elem = $('<option>Vuelo completo</option>');
-            $('#lista').append(elem);
-        } else if (data == -1) {
-            var elem = $('<option>El vuelo no existe</option>');
-            $('#lista').append(elem);
-        } else {
-            $.each(data, function (key, value) {
-                var elem = $('<option>' + value + '</option>').val(value);
-                $('#lista').append(elem);
-            });
-        }
-    }
-
-EOT;
-
-$this->registerJs($js);
+// $urlVueloPlazasLibres = Url::to(['vuelos/plazas-libres']);
+//
+// $js = <<<EOT
+//     $('#vuelo').on('blur', function() {
+//         $.getJSON(
+//             '$urlVueloPlazasLibres',
+//             {vuelo_id: $(this).val()},
+//             mostrar
+//         );
+//     });
+//
+//     function mostrar(data) {
+//         $('#lista').empty();
+//         if (data.length == 0) {
+//             var elem = $('<option>Vuelo completo</option>');
+//             $('#lista').append(elem);
+//         } else if (data == -1) {
+//             var elem = $('<option>El vuelo no existe</option>');
+//             $('#lista').append(elem);
+//         } else {
+//             $.each(data, function (key, value) {
+//                 var elem = $('<option>' + value + '</option>').val(value);
+//                 $('#lista').append(elem);
+//             });
+//         }
+//     }
+//
+// EOT;
+//
+// $this->registerJs($js);
 
 ?>
 
@@ -45,13 +45,11 @@ $this->registerJs($js);
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'usuario_id')->textInput() ?>
+    <?= Html::activeHiddenInput($model, 'usuario_id') ?>
 
-    <?= $form->field($model, 'vuelo_id')->textInput(['id' => 'vuelo']) ?>
+    <?= Html::activeHiddenInput($model, 'vuelo_id') ?>
 
-    <?= $form->field($model, 'asiento')->dropDownList(['---'], ['id' => 'lista']) ?>
-
-    <!-- <?= $form->field($model, 'fecha_hora')->textInput() ?> -->
+    <?= $form->field($model, 'asiento')->dropDownList($asientos, ['id' => 'lista']) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

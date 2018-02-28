@@ -37,10 +37,22 @@ class VuelosController extends Controller
      */
     public function actionIndex()
     {
+        $v = Vuelos::find()
+            ->joinWith('reservas')
+            ->select('vuelos.*, (vuelos.plazas - count(vuelo_id)) as libres')
+            ->groupBy('vuelos.id, vuelo_id')
+            ->where(['>', 'salida', date('Y-m-d H:i:s')]);
+
         $dataProvider = new ActiveDataProvider([
-            'query' => Vuelos::find()->where(['>', 'salida', date('Y-m-d H:i:s')]),
+            'query' => $v,
+            // 'query' => Vuelos::find()->where(['>', 'salida', date('Y-m-d H:i:s')]),
             // 'query' => Vuelos::find()->where(new Expression('salida > current_timestamp')),
         ]);
+
+        $dataProvider->sort->attributes['libres'] = [
+            'asc' => ['libres' => SORT_ASC],
+            'desc' => ['libres' => SORT_DESC],
+        ];
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
@@ -57,7 +69,6 @@ class VuelosController extends Controller
         }
 
         return $vuelo->asientoslibres;
-        // return $vuelo->asientoslibres;
     }
 
     /**

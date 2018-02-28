@@ -22,6 +22,7 @@ namespace app\models;
  */
 class Vuelos extends \yii\db\ActiveRecord
 {
+    public $libres;
     /**
      * {@inheritdoc}
      */
@@ -39,6 +40,12 @@ class Vuelos extends \yii\db\ActiveRecord
             [['id_vuelo', 'orig_id', 'dest_id', 'comp_id', 'salida', 'llegada', 'plazas', 'precio'], 'required'],
             [['orig_id', 'dest_id', 'comp_id'], 'default', 'value' => null],
             [['orig_id', 'dest_id', 'comp_id'], 'integer'],
+            [
+                ['id_vuelo'],
+                'match',
+                'pattern' => '/^[A-Z]{2}\d{4}$/',
+                'message' => 'El identificador del vuelo tiene que ser XXNNNN',
+            ],
             [['salida', 'llegada'], 'safe'],
             [['plazas', 'precio'], 'number'],
             [['id_vuelo'], 'string', 'max' => 6],
@@ -72,7 +79,7 @@ class Vuelos extends \yii\db\ActiveRecord
         $array = [];
         for ($i = 1; $i < $this->plazas + 1; $i++) {
             if (!in_array($i, $ocupados)) {
-                $array[] = $i;
+                $array[$i] = $i;
             }
         }
 
@@ -101,7 +108,7 @@ class Vuelos extends \yii\db\ActiveRecord
 
     public function getTienePlazasLibres()
     {
-        return ($this->plazas - $this->getReservas()->count()) !== 0;
+        return $this->plazaslibres !== 0;
     }
 
     /**

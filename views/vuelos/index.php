@@ -1,5 +1,7 @@
 <?php
 
+use yii\grid\ActionColumn;
+
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -27,12 +29,35 @@ $this->params['breadcrumbs'][] = $this->title;
             'orig_id',
             'dest_id',
             'comp_id',
-            'salida',
+            'salida:datetime',
+            'libres:text:Plazas libres',
             //'llegada',
-            'plazaslibres',
+            // 'plazaslibres',
             //'precio',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => ActionColumn::className(),
+                'template' => '{reservar}',
+                'header' => 'Reservar',
+                'buttons' => [
+                    'reservar' => function ($url, $model, $key) {
+                        if ($model->libres > 0) {
+                            return Html::beginForm(
+                                ['reservas/create'],
+                                'get'
+                                )
+                                . Html::hiddenInput('vuelo_id', $model->id)
+                                . Html::submitButton(
+                                    'Reservar',
+                                    ['class' => 'btn btn-xs btn-success']
+                                    )
+                                    . Html::endForm();
+                        } else {
+                            return Html::tag('span', 'No disponible', ['class' => 'label label-default']);
+                        }
+                    },
+                ],
+            ],
         ],
     ]); ?>
 </div>
